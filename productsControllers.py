@@ -71,7 +71,16 @@ class getCategories(Resource):
 
 class getProductsByCategory(Resource):
     def get(self, productCategory):
-        prod = prods.find({"productCategory": productCategory})
+        if productCategory != "No Category":
+            prod = list(prods.find({"productCategory": productCategory}))
+        else:
+            prod = list(prods.find({"productCategory": ""}))
+        for i in range(len(prod)):
+            auxP = prod[i]
+            auxOi = _json_convert(auxP["_id"])
+            auxP["_id"] = auxOi["$oid"]
+            prod[i] = auxP
+        print(prod)
         data = {}
         data["product"] = prod
         data = _json_convert(data)
