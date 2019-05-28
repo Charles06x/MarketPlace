@@ -15,6 +15,8 @@ CORS(app)
 api = Api(app)
 api.add_resource(getAllProducts, '/api/products')
 api.add_resource(getOneProduct, '/api/products/<id>')
+api.add_resource(getCategories, '/api/categories')
+api.add_resource(getProductsByCategory, '/api/<productCategory>/products')
 
 if __name__ == '__main__':
     app.run(debug=True)

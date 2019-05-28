@@ -30,7 +30,6 @@ img = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Simple_cardboar
 class getAllProducts(Resource):
     def get(self):
         prod = (list(prods.find().sort("productName", pymongo.ASCENDING)))
-        firstProd = prod[0]
         for i in range(len(prod)):
             auxP = prod[i]
             auxOi = _json_convert(auxP["_id"])
@@ -54,4 +53,26 @@ class getOneProduct(Resource):
         prod = auxP
         data = {}
         data["product"] = prod
+        return data
+
+class getCategories(Resource):
+    def get(self):
+        cat = []
+        prod = list(prods.find().sort("productName", pymongo.ASCENDING))
+        for i in prod:
+            if i["productCategory"] not in cat:
+                if i["productCategory"] != "":
+                    cat.append(i["productCategory"])
+                else:
+                    cat.append("No Category")
+        data = {}
+        data["categories"] = cat
+        return data
+
+class getProductsByCategory(Resource):
+    def get(self, productCategory):
+        prod = prods.find({"productCategory": productCategory})
+        data = {}
+        data["product"] = prod
+        data = _json_convert(data)
         return data
